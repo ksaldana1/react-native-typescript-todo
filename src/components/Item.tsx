@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import Checkbox from './Checkbox';

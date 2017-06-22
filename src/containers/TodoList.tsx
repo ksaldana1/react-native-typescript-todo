@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import styled from 'styled-components/native';
 import { connect } from 'react-redux';
 import Title from '../components/Title';
@@ -6,7 +6,8 @@ import Input from '../components/Input';
 import List from '../components/List';
 import Footer from '../components/Footer';
 import { TodoItem } from '../types/domain';
-import { ActionTypes, ActionCreators, TodoState } from '../redux/reducer';
+import { TodoState } from '../redux/reducer';
+import { ActionTypes, ActionCreators } from '../redux/actions';
 
 interface Props {
   items: TodoItem[];

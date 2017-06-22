@@ -1,12 +1,13 @@
-import React from 'react';
+import * as React from 'react';
 import { Provider } from 'react-redux';
-import { View, Text, StyleSheet } from 'react-native';
-import styled from 'styled-components/native';
 import TodoList from './containers/TodoList';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import { rootEpic } from './redux/epics';
 import reducer from './redux/reducer';
+import { createEpicMiddleware } from 'redux-observable';
 
-const store = createStore(reducer);
+const epicMiddleware = createEpicMiddleware(rootEpic);
+const store = createStore(reducer, applyMiddleware(epicMiddleware));
 
 export default class App extends React.Component<{}, {}> {
   render() {

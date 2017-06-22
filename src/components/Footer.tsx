@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import styled from 'styled-components/native';
 
