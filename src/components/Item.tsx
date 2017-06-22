@@ -10,7 +10,7 @@ interface Props {
   onRemoveItem: () => void;
 }
 
-const ItemContainer = styled.View`
+const Container = styled.View`
   padding: 15px;
   flex-direction: row;
   justify-content: space-between;
@@ -33,7 +33,7 @@ const RemoveText = styled.Text`
 export default class Item extends React.Component<Props, {}> {
   render() {
     return (
-      <ItemContainer>
+      <Container>
         <Text>{this.props.item.label}</Text>
         <RightSection>
           <Checkbox
@@ -44,7 +44,7 @@ export default class Item extends React.Component<Props, {}> {
             <RemoveText> &times;</RemoveText>
           </TouchableOpacity>
         </RightSection>
-      </ItemContainer>
+      </Container>
     );
   }
 }

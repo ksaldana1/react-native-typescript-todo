@@ -6,7 +6,7 @@ interface Props {
   onRemoveCompleted: () => void;
 }
 
-const FooterContainer = styled.TouchableOpacity`
+const Container = styled.TouchableOpacity`
   padding-vertical: 15px
   align-items: center;
 `;
@@ -18,9 +18,9 @@ const FooterText = styled.Text`
 export default class Footer extends React.Component<Props, {}> {
   render() {
     return (
-      <FooterContainer onPress={this.props.onRemoveCompleted}>
+      <Container onPress={this.props.onRemoveCompleted}>
         <FooterText>{this.props.children}</FooterText>
-      </FooterContainer>
+      </Container>
     );
   }
 }
