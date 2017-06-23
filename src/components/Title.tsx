@@ -4,10 +4,11 @@ import styled from 'styled-components/native';
 
 interface Props {
   children?: React.ReactNode;
+  error?: boolean;
 }
 
 const Header = styled.View`
-  background-color: skyblue;
+  background-color: ${(props: Props) => (props.error ? 'red' : 'skyblue')};
   padding: 15px;
 `;
 
@@ -16,9 +17,9 @@ const TitleText = styled.Text`
   color: white;
 `;
 
-const Title = ({ children }: Props) =>
-  <Header>
-    <TitleText>{children}</TitleText>
+const Title = (props: Props) =>
+  <Header error={props.error}>
+    <TitleText>{props.children}</TitleText>
   </Header>;
 
 export default Title;

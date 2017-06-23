@@ -8,7 +8,12 @@ import {
 } from './actions';
 import { Observable } from 'rxjs/Rx';
 import { TodoService } from '../services/TodoService';
-import { ToggleItemCompletedAction, FetchAction, RemoveCompletedAction } from './actions';
+import {
+  ToggleItemCompletedAction,
+  FetchAction,
+  RemoveCompletedAction,
+  RequestFailAction,
+} from './actions';
 
 const fetch$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
   return action$.ofType(ActionTypes.FETCH_TODOS).mergeMap(async (action: FetchAction) => {
@@ -16,8 +21,7 @@ const fetch$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) =
       const response = await svc.fetchItems();
       return ActionCreators.setTodos(response);
     } catch (e) {
-      console.error('handle errors better', e);
-      return Observable.empty();
+      return ActionCreators.requestFailed('Fetch Failed');
     }
   });
 };
@@ -28,8 +32,7 @@ const add$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => 
       const response = await svc.addItem(action.payload.label);
       return ActionCreators.setTodos(response);
     } catch (e) {
-      console.error('handle errors better', e);
-      return Observable.empty();
+      return ActionCreators.requestFailed('Add Item Failed');
     }
   });
 };
@@ -42,8 +45,7 @@ const delete$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) 
         const response = await svc.deleteItem(action.payload.id);
         return ActionCreators.setTodos(response);
       } catch (e) {
-        console.error('handle errors better', e);
-        return Observable.empty();
+        return ActionCreators.requestFailed('Delete Item Failed');
       }
     });
 };
@@ -56,8 +58,7 @@ const toggle$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) 
         const response = await svc.toggleItem(action.payload.id);
         return ActionCreators.setTodos(response);
       } catch (e) {
-        console.error('handle errors better', e);
-        return Observable.empty();
+        return ActionCreators.requestFailed('Toggle Item Failed');
       }
     });
 };
@@ -70,9 +71,16 @@ const clear$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) =
         const response = await svc.clearItems();
         return ActionCreators.setTodos(response);
       } catch (e) {
-        console.error('handle errors better', e);
-        return Observable.empty();
+        return ActionCreators.requestFailed('Clear Items Failed');
       }
+    });
+};
+
+const error$ = (action$: ActionsObservable<TodoActions>) => {
+  return action$
+    .ofType(ActionTypes.REQUEST_FAILED)
+    .mergeMap((action: RequestFailAction) => {
+      return Observable.of(ActionCreators.clearError()).delay(3000);
     });
 };
 
@@ -82,5 +90,6 @@ export default combineEpics(
   delete$(svc),
   clear$(svc),
   toggle$(svc),
-  fetch$(svc)
+  fetch$(svc),
+  error$
 );

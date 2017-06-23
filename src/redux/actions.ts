@@ -7,6 +7,8 @@ export enum ActionTypes {
   REMOVE_COMPLETED = 'REMOVE_COMPLETED',
   SET_TODOS = 'SET_TODOS',
   FETCH_TODOS = 'FETCH_TODOS',
+  REQUEST_FAILED = 'REQUEST_FAILED',
+  CLEAR_ERROR = 'CLEAR_ERROR',
 }
 
 export type AddItemAction = { type: ActionTypes.ADD_ITEM; payload: { label: string } };
@@ -43,6 +45,16 @@ const fetchTodos = (): FetchAction => {
   return { type: ActionTypes.FETCH_TODOS };
 };
 
+export type RequestFailAction = { type: ActionTypes.REQUEST_FAILED; payload: string };
+const requestFailed = (error: string): RequestFailAction => {
+  return { type: ActionTypes.REQUEST_FAILED, payload: error };
+};
+
+export type ClearErrorAction = { type: ActionTypes.CLEAR_ERROR };
+const clearError = (): ClearErrorAction => {
+  return { type: ActionTypes.CLEAR_ERROR };
+};
+
 /*
   Using this is as the default output of the epics observable is pretty lazy
   It will force re-renders of the entire app. If I was doing anything more than 
@@ -61,12 +73,16 @@ export const ActionCreators = {
   removeCompleted,
   setTodos,
   fetchTodos,
+  requestFailed,
+  clearError,
 };
 
 export type TodoActions =
   | FetchAction
+  | RequestFailAction
   | AddItemAction
   | RemoveItemAction
   | ToggleItemCompletedAction
   | RemoveCompletedAction
+  | ClearErrorAction
   | SetTodos;

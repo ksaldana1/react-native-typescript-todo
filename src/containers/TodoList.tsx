@@ -11,6 +11,8 @@ import { ActionTypes, ActionCreators } from '../redux/actions';
 
 interface Props {
   items: TodoItem[];
+  isError: boolean;
+  errorMsg: string;
   addItem: (label: string) => void;
   removeItem: (item: TodoItem) => void;
   toggleItemCompleted: (item: TodoItem) => void;
@@ -29,9 +31,12 @@ const Divider = styled.View`
 
 class TodoList extends React.Component<Props, {}> {
   render() {
+    const { isError } = this.props;
     return (
       <Container>
-        <Title> Todo List </Title>
+        <Title error={isError}>
+          {isError ? this.props.errorMsg : 'Todo List'}
+        </Title>
         <Input placeholder={'Enter an item'} onSubmit={this.props.addItem} />
         <Divider />
         <List
@@ -51,6 +56,8 @@ class TodoList extends React.Component<Props, {}> {
 
 const mapStateToProps = (state: TodoState) => ({
   items: state.items,
+  isError: state.error,
+  errorMsg: state.errorMsg,
 });
 
 const mapDispatchToProps = dispatch => ({

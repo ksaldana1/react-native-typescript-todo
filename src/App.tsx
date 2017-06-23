@@ -7,9 +7,11 @@ import reducer from './redux/reducer';
 import { createEpicMiddleware } from 'redux-observable';
 import { TodoActions } from './redux/actions';
 import { TodoState } from './redux/reducer';
+import devToolsEnhancer from 'remote-redux-devtools';
+import { composeWithDevTools } from 'remote-redux-devtools';
 
 const epicMiddleware = createEpicMiddleware(rootEpic);
-const store = createStore(reducer, applyMiddleware(epicMiddleware));
+const store = createStore(reducer, composeWithDevTools(applyMiddleware(epicMiddleware)));
 
 export default class App extends React.Component<{}, {}> {
   render() {
