@@ -15,7 +15,7 @@ import {
   RequestFailAction,
 } from './actions';
 
-const fetch$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
+export const fetch$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
   return action$
     .ofType(ActionTypes.FETCH_TODOS)
     .switchMap(async (action: FetchAction) => {
@@ -28,7 +28,7 @@ const fetch$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) =
     });
 };
 
-const add$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
+export const add$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
   return action$.ofType(ActionTypes.ADD_ITEM).mergeMap(async (action: AddItemAction) => {
     try {
       const response = await svc.addItem(action.payload.label);
@@ -39,7 +39,9 @@ const add$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => 
   });
 };
 
-const delete$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
+export const delete$ = (svc: TodoService) => (
+  action$: ActionsObservable<TodoActions>
+) => {
   return action$
     .ofType(ActionTypes.REMOVE_ITEM)
     .mergeMap(async (action: RemoveItemAction) => {
@@ -52,7 +54,9 @@ const delete$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) 
     });
 };
 
-const toggle$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
+export const toggle$ = (svc: TodoService) => (
+  action$: ActionsObservable<TodoActions>
+) => {
   return action$
     .ofType(ActionTypes.TOGGLE_ITEM_COMPLETED)
     .mergeMap(async (action: ToggleItemCompletedAction) => {
@@ -65,7 +69,7 @@ const toggle$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) 
     });
 };
 
-const clear$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
+export const clear$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
   return action$
     .ofType(ActionTypes.REMOVE_COMPLETED)
     .switchMap(async (action: RemoveCompletedAction) => {
