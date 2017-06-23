@@ -8,6 +8,7 @@ import {
 } from './actions';
 import { Observable } from 'rxjs/Rx';
 import { TodoService } from '../services/TodoService';
+import { TodoItem } from '../types/domain';
 import {
   ToggleItemCompletedAction,
   FetchAction,
@@ -15,12 +16,14 @@ import {
   RequestFailAction,
 } from './actions';
 
-export const fetch$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
+export const fetch$ = (fetcher: { fetchItems: () => Promise<TodoItem[]> }) => (
+  action$: ActionsObservable<TodoActions>
+) => {
   return action$
     .ofType(ActionTypes.FETCH_TODOS)
     .switchMap(async (action: FetchAction) => {
       try {
-        const response = await svc.fetchItems();
+        const response = await fetcher.fetchItems();
         return ActionCreators.setTodos(response);
       } catch (e) {
         return ActionCreators.requestFailed('Fetch Failed');
@@ -90,12 +93,12 @@ const error$ = (action$: ActionsObservable<TodoActions>) => {
     });
 };
 
-const svc = new TodoService();
+const service = new TodoService();
 export default combineEpics(
-  add$(svc),
-  delete$(svc),
-  clear$(svc),
-  toggle$(svc),
-  fetch$(svc),
+  add$(service),
+  delete$(service),
+  clear$(service),
+  toggle$(service),
+  fetch$(service),
   error$
 );
