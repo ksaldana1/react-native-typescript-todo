@@ -16,14 +16,16 @@ import {
 } from './actions';
 
 const fetch$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
-  return action$.ofType(ActionTypes.FETCH_TODOS).mergeMap(async (action: FetchAction) => {
-    try {
-      const response = await svc.fetchItems();
-      return ActionCreators.setTodos(response);
-    } catch (e) {
-      return ActionCreators.requestFailed('Fetch Failed');
-    }
-  });
+  return action$
+    .ofType(ActionTypes.FETCH_TODOS)
+    .switchMap(async (action: FetchAction) => {
+      try {
+        const response = await svc.fetchItems();
+        return ActionCreators.setTodos(response);
+      } catch (e) {
+        return ActionCreators.requestFailed('Fetch Failed');
+      }
+    });
 };
 
 const add$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
@@ -66,7 +68,7 @@ const toggle$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) 
 const clear$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
   return action$
     .ofType(ActionTypes.REMOVE_COMPLETED)
-    .mergeMap(async (action: RemoveCompletedAction) => {
+    .switchMap(async (action: RemoveCompletedAction) => {
       try {
         const response = await svc.clearItems();
         return ActionCreators.setTodos(response);
@@ -79,7 +81,7 @@ const clear$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) =
 const error$ = (action$: ActionsObservable<TodoActions>) => {
   return action$
     .ofType(ActionTypes.REQUEST_FAILED)
-    .mergeMap((action: RequestFailAction) => {
+    .switchMap((action: RequestFailAction) => {
       return Observable.of(ActionCreators.clearError()).delay(3000);
     });
 };

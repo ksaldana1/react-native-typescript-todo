@@ -40,7 +40,7 @@ const Item = (props: Props) => {
           isChecked={props.item.completed}
         />
         <TouchableOpacity onPress={() => props.onRemoveItem()}>
-          <RemoveText> &times;</RemoveText>
+          <RemoveText> &times; </RemoveText>
         </TouchableOpacity>
       </RightSection>
     </Container>
