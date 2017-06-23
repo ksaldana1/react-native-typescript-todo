@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 
 interface Props {
   onRemoveCompleted: () => void;
+  children?: React.ReactNode;
 }
 
 const Container = styled.TouchableOpacity`
@@ -15,12 +16,9 @@ const FooterText = styled.Text`
   color: #CD5C5C;
 `;
 
-export default class Footer extends React.Component<Props, {}> {
-  render() {
-    return (
-      <Container onPress={this.props.onRemoveCompleted}>
-        <FooterText>{this.props.children}</FooterText>
-      </Container>
-    );
-  }
-}
+const Footer = (props: Props) =>
+  <Container onPress={props.onRemoveCompleted}>
+    <FooterText>{props.children}</FooterText>
+  </Container>;
+
+export default Footer;

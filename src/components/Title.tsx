@@ -16,12 +16,9 @@ const TitleText = styled.Text`
   color: white;
 `;
 
-export default class Title extends React.Component<Props, {}> {
-  render() {
-    return (
-      <Header>
-        <TitleText>{this.props.children}</TitleText>
-      </Header>
-    );
-  }
-}
+const Title = ({ children }: Props) =>
+  <Header>
+    <TitleText>{children}</TitleText>
+  </Header>;
+
+export default Title;

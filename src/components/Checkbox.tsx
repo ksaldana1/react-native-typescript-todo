@@ -19,14 +19,14 @@ const Inner = styled.View`
   background-color: rgba(0,0,0,0.8)
 `;
 
-export default class Checkbox extends React.Component<Props, {}> {
-  render() {
-    return (
-      <TouchableOpacity onPress={this.props.onToggle}>
-        <Box>
-          {this.props.isChecked && <Inner />}
-        </Box>
-      </TouchableOpacity>
-    );
-  }
-}
+const Checkbox = (props: Props) => {
+  return (
+    <TouchableOpacity onPress={props.onToggle}>
+      <Box>
+        {props.isChecked && <Inner />}
+      </Box>
+    </TouchableOpacity>
+  );
+};
+
+export default Checkbox;

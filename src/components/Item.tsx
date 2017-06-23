@@ -30,21 +30,21 @@ const RemoveText = styled.Text`
   color: #CD5C5C;
 `;
 
-export default class Item extends React.Component<Props, {}> {
-  render() {
-    return (
-      <Container>
-        <Text>{this.props.item.label}</Text>
-        <RightSection>
-          <Checkbox
-            onToggle={() => this.props.onToggleItemCompleted()}
-            isChecked={this.props.item.completed}
-          />
-          <TouchableOpacity onPress={() => this.props.onRemoveItem()}>
-            <RemoveText> &times;</RemoveText>
-          </TouchableOpacity>
-        </RightSection>
-      </Container>
-    );
-  }
-}
+const Item = (props: Props) => {
+  return (
+    <Container>
+      <Text>{props.item.label}</Text>
+      <RightSection>
+        <Checkbox
+          onToggle={() => props.onToggleItemCompleted()}
+          isChecked={props.item.completed}
+        />
+        <TouchableOpacity onPress={() => props.onRemoveItem()}>
+          <RemoveText> &times;</RemoveText>
+        </TouchableOpacity>
+      </RightSection>
+    </Container>
+  );
+};
+
+export default Item;
