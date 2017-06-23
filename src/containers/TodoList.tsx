@@ -15,6 +15,7 @@ interface Props {
   removeItem: (item: TodoItem) => void;
   toggleItemCompleted: (item: TodoItem) => void;
   removeCompleted: () => void;
+  fetchTodos: () => void;
 }
 
 const Container = styled.View`
@@ -37,6 +38,7 @@ class TodoList extends React.Component<Props, {}> {
           items={this.props.items}
           onRemoveItem={this.props.removeItem}
           onToggleItemCompleted={this.props.toggleItemCompleted}
+          fetchTodos={this.props.fetchTodos}
         />
         <Divider />
         <Footer onRemoveCompleted={this.props.removeCompleted}>
@@ -53,9 +55,10 @@ const mapStateToProps = (state: TodoState) => ({
 
 const mapDispatchToProps = dispatch => ({
   addItem: (label: string) => dispatch(ActionCreators.addItem(label)),
-  removeItem: (item: TodoItem) => dispatch(ActionCreators.removeItem(item)),
+  fetchTodos: () => dispatch(ActionCreators.fetchTodos()),
+  removeItem: (item: TodoItem) => dispatch(ActionCreators.removeItem(item.id)),
   toggleItemCompleted: (item: TodoItem) =>
-    dispatch(ActionCreators.toggleItemCompleted(item)),
+    dispatch(ActionCreators.toggleItemCompleted(item.id)),
   removeCompleted: () => dispatch(ActionCreators.removeCompleted()),
 });
 

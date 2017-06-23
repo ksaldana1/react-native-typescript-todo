@@ -16,7 +16,7 @@ const TitleText = styled.Text`
   color: white;
 `;
 
-export default class Title extends React.PureComponent<Props, {}> {
+export default class Title extends React.Component<Props, {}> {
   render() {
     return (
       <Header>

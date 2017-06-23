@@ -8,6 +8,7 @@ interface Props {
   items: TodoItem[];
   onRemoveItem: (item: TodoItem) => void;
   onToggleItemCompleted: (item: TodoItem) => void;
+  fetchTodos: () => void;
 }
 
 const Container = styled.ScrollView`
@@ -15,6 +16,14 @@ const Container = styled.ScrollView`
 `;
 
 export default class List extends React.Component<Props, {}> {
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidMount() {
+    this.props.fetchTodos();
+  }
+
   render() {
     return (
       <Container>
@@ -24,7 +33,7 @@ export default class List extends React.Component<Props, {}> {
               onRemoveItem={() => this.props.onRemoveItem(item)}
               onToggleItemCompleted={() => this.props.onToggleItemCompleted(item)}
               item={item}
-              key={i}
+              key={item.id}
             />
           );
         })}
