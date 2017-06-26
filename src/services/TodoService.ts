@@ -1,5 +1,5 @@
 import { API } from '../../environment';
-import { TodoItem } from '../types/domain';
+import { Todo } from '../types/domain';
 
 const url = API;
 
@@ -15,34 +15,36 @@ function jsonPOSTRequest(toJSON?: any) {
   };
 }
 
-export class TodoService {
-  fetchItems = async (): Promise<TodoItem[]> => {
+const TodoService: Todo.Service = {
+  fetchItems: async (): Promise<Todo.Item[]> => {
     const response = await fetch(`${API}/todo`, { method: 'GET' });
     return await response.json();
-  };
+  },
 
-  addItem = async (label: string): Promise<TodoItem[]> => {
+  addItem: async (label: string): Promise<Todo.Item[]> => {
     const response = await fetch(`${API}/todo`, jsonPOSTRequest({ label }));
     return await response.json();
-  };
+  },
 
-  deleteItem = async (id: TodoItem['id']): Promise<TodoItem[]> => {
+  deleteItem: async (id: Todo.Item['id']): Promise<Todo.Item[]> => {
     const response = await fetch(`${API}/todo/delete`, jsonPOSTRequest({ id }));
     return await response.json();
-  };
+  },
 
-  toggleItem = async (id: TodoItem['id']): Promise<TodoItem[]> => {
+  toggleItem: async (id: Todo.Item['id']): Promise<Todo.Item[]> => {
     const response = await fetch(`${API}/todo/toggle`, jsonPOSTRequest({ id }));
     return await response.json();
-  };
+  },
 
-  clearItems = async (): Promise<TodoItem[]> => {
+  clearCompletedItems: async (): Promise<Todo.Item[]> => {
     const response = await fetch(`${API}/todo/clear`, jsonPOSTRequest());
     return await response.json();
-  };
+  },
 
-  resetItems = async (): Promise<TodoItem[]> => {
+  resetItems: async (): Promise<Todo.Item[]> => {
     const response = await fetch(`${API}/todo/reset`, jsonPOSTRequest());
     return await response.json();
-  };
-}
+  },
+};
+
+export default TodoService;

@@ -49,7 +49,7 @@ describe('delete$ epic', () => {
   });
 
   it('dispatches the correct action when successful', async () => {
-    const mockResponse = [...mockData[0]];
+    const mockResponse = [mockData[0]];
     const mockService = {
       deleteItem: () => Promise.resolve(mockResponse),
     };
@@ -158,7 +158,7 @@ describe('clear$ epic', () => {
   it('dispatches the correct action when successful', async () => {
     const mockResponse = mockData.filter(item => !item.completed);
     const mockService = {
-      clearItems: () => Promise.resolve(mockResponse),
+      clearCompletedItems: () => Promise.resolve(mockResponse),
     };
 
     const expectedOutputActions = {

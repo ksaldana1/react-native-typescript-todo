@@ -1,7 +1,7 @@
-import { TodoItem } from '../types/domain';
+import { Todo } from '../types/domain';
 import { ActionTypes, TodoActions } from './actions';
 
-export interface TodoState { items: TodoItem[]; error: boolean; errorMsg: string }
+export interface TodoState { items: Todo.Item[]; error: boolean; errorMsg: string }
 const initialState: TodoState = {
   items: [],
   error: false,

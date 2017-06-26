@@ -1,29 +1,26 @@
 import { ActionsObservable, combineEpics } from 'redux-observable';
+import { Observable } from 'rxjs/Rx';
+import { Todo } from '../types/domain';
 import {
+  ToggleItemCompletedAction,
+  FetchAction,
+  RemoveCompletedAction,
+  RequestFailAction,
   AddItemAction,
   ActionTypes,
   ActionCreators,
   TodoActions,
   RemoveItemAction,
 } from './actions';
-import { Observable } from 'rxjs/Rx';
-import { TodoService } from '../services/TodoService';
-import { TodoItem } from '../types/domain';
-import {
-  ToggleItemCompletedAction,
-  FetchAction,
-  RemoveCompletedAction,
-  RequestFailAction,
-} from './actions';
 
-export const fetch$ = (fetcher: { fetchItems: () => Promise<TodoItem[]> }) => (
-  action$: ActionsObservable<TodoActions>
-) => {
+type Action$ = ActionsObservable<{ type: ActionTypes }>;
+
+export const fetch$ = (svc: Todo.Fetcher) => (action$: Action$) => {
   return action$
     .ofType(ActionTypes.FETCH_TODOS)
     .switchMap(async (action: FetchAction) => {
       try {
-        const response = await fetcher.fetchItems();
+        const response = await svc.fetchItems();
         return ActionCreators.setTodos(response);
       } catch (e) {
         return ActionCreators.requestFailed('Fetch Failed');
@@ -31,7 +28,7 @@ export const fetch$ = (fetcher: { fetchItems: () => Promise<TodoItem[]> }) => (
     });
 };
 
-export const add$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
+export const add$ = (svc: Todo.Adder) => (action$: Action$) => {
   return action$.ofType(ActionTypes.ADD_ITEM).mergeMap(async (action: AddItemAction) => {
     try {
       const response = await svc.addItem(action.payload.label);
@@ -42,9 +39,7 @@ export const add$ = (svc: TodoService) => (action$: ActionsObservable<TodoAction
   });
 };
 
-export const delete$ = (svc: TodoService) => (
-  action$: ActionsObservable<TodoActions>
-) => {
+export const delete$ = (svc: Todo.Deleter) => (action$: Action$) => {
   return action$
     .ofType(ActionTypes.REMOVE_ITEM)
     .mergeMap(async (action: RemoveItemAction) => {
@@ -57,9 +52,7 @@ export const delete$ = (svc: TodoService) => (
     });
 };
 
-export const toggle$ = (svc: TodoService) => (
-  action$: ActionsObservable<TodoActions>
-) => {
+export const toggle$ = (svc: Todo.Toggler) => (action$: Action$) => {
   return action$
     .ofType(ActionTypes.TOGGLE_ITEM_COMPLETED)
     .mergeMap(async (action: ToggleItemCompletedAction) => {
@@ -72,12 +65,12 @@ export const toggle$ = (svc: TodoService) => (
     });
 };
 
-export const clear$ = (svc: TodoService) => (action$: ActionsObservable<TodoActions>) => {
+export const clear$ = (svc: Todo.Clearer) => (action$: Action$) => {
   return action$
     .ofType(ActionTypes.REMOVE_COMPLETED)
     .switchMap(async (action: RemoveCompletedAction) => {
       try {
-        const response = await svc.clearItems();
+        const response = await svc.clearCompletedItems();
         return ActionCreators.setTodos(response);
       } catch (e) {
         return ActionCreators.requestFailed('Clear Items Failed');
@@ -85,7 +78,7 @@ export const clear$ = (svc: TodoService) => (action$: ActionsObservable<TodoActi
     });
 };
 
-const error$ = (action$: ActionsObservable<TodoActions>) => {
+const error$ = (action$: Action$) => {
   return action$
     .ofType(ActionTypes.REQUEST_FAILED)
     .switchMap((action: RequestFailAction) => {
@@ -93,12 +86,12 @@ const error$ = (action$: ActionsObservable<TodoActions>) => {
     });
 };
 
-const service = new TodoService();
+import TodoService from '../services/TodoService';
 export default combineEpics(
-  add$(service),
-  delete$(service),
-  clear$(service),
-  toggle$(service),
-  fetch$(service),
+  add$(TodoService),
+  delete$(TodoService),
+  clear$(TodoService),
+  toggle$(TodoService),
+  fetch$(TodoService),
   error$
 );

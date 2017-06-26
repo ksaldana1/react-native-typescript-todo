@@ -2,12 +2,12 @@ import * as React from 'react';
 import { ScrollView } from 'react-native';
 import styled from 'styled-components/native';
 import Item from './Item';
-import { TodoItem } from '../types/domain';
+import { Todo } from '../types/domain';
 
 interface Props {
-  items: TodoItem[];
-  onRemoveItem: (item: TodoItem) => void;
-  onToggleItemCompleted: (item: TodoItem) => void;
+  items: Todo.Item[];
+  onRemoveItem: (item: Todo.Item) => void;
+  onToggleItemCompleted: (item: Todo.Item) => void;
   fetchTodos: () => void;
 }
 

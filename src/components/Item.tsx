@@ -2,10 +2,10 @@ import * as React from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import Checkbox from './Checkbox';
-import { TodoItem } from '../types/domain';
+import { Todo } from '../types/domain';
 
 interface Props {
-  item: TodoItem;
+  item: Todo.Item;
   onToggleItemCompleted: () => void;
   onRemoveItem: () => void;
 }

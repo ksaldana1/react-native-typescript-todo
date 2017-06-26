@@ -5,17 +5,17 @@ import Title from '../components/Title';
 import Input from '../components/Input';
 import List from '../components/List';
 import Footer from '../components/Footer';
-import { TodoItem } from '../types/domain';
+import { Todo } from '../types/domain';
 import { TodoState } from '../redux/reducer';
 import { ActionTypes, ActionCreators } from '../redux/actions';
 
 interface Props {
-  items: TodoItem[];
+  items: Todo.Item[];
   isError: boolean;
   errorMsg: string;
   addItem: (label: string) => void;
-  removeItem: (item: TodoItem) => void;
-  toggleItemCompleted: (item: TodoItem) => void;
+  removeItem: (item: Todo.Item) => void;
+  toggleItemCompleted: (item: Todo.Item) => void;
   removeCompleted: () => void;
   fetchTodos: () => void;
 }
@@ -63,8 +63,8 @@ const mapStateToProps = (state: TodoState) => ({
 const mapDispatchToProps = dispatch => ({
   addItem: (label: string) => dispatch(ActionCreators.addItem(label)),
   fetchTodos: () => dispatch(ActionCreators.fetchTodos()),
-  removeItem: (item: TodoItem) => dispatch(ActionCreators.removeItem(item.id)),
-  toggleItemCompleted: (item: TodoItem) =>
+  removeItem: (item: Todo.Item) => dispatch(ActionCreators.removeItem(item.id)),
+  toggleItemCompleted: (item: Todo.Item) =>
     dispatch(ActionCreators.toggleItemCompleted(item.id)),
   removeCompleted: () => dispatch(ActionCreators.removeCompleted()),
 });

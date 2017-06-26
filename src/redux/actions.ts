@@ -1,4 +1,4 @@
-import { TodoItem } from '../types/domain';
+import { Todo } from '../types/domain';
 
 export enum ActionTypes {
   ADD_ITEM = 'ADD_ITEM',
@@ -18,17 +18,17 @@ const addItem = (label: string): AddItemAction => {
 
 export type RemoveItemAction = {
   type: ActionTypes.REMOVE_ITEM;
-  payload: { id: TodoItem['id'] };
+  payload: { id: Todo.Item['id'] };
 };
-const removeItem = (id: TodoItem['id']): RemoveItemAction => {
+const removeItem = (id: Todo.Item['id']): RemoveItemAction => {
   return { type: ActionTypes.REMOVE_ITEM, payload: { id } };
 };
 
 export type ToggleItemCompletedAction = {
   type: ActionTypes.TOGGLE_ITEM_COMPLETED;
-  payload: { id: TodoItem['id'] };
+  payload: { id: Todo.Item['id'] };
 };
-const toggleItemCompleted = (id: TodoItem['id']): ToggleItemCompletedAction => {
+const toggleItemCompleted = (id: Todo.Item['id']): ToggleItemCompletedAction => {
   return {
     type: ActionTypes.TOGGLE_ITEM_COMPLETED,
     payload: { id },
@@ -61,8 +61,8 @@ const clearError = (): ClearErrorAction => {
   a proof of concept, I would spend more time plucking/adding single items
   to the state tree
 */
-export type SetTodos = { type: ActionTypes.SET_TODOS; payload: TodoItem[] };
-const setTodos = (todos: TodoItem[]) => {
+export type SetTodos = { type: ActionTypes.SET_TODOS; payload: Todo.Item[] };
+const setTodos = (todos: Todo.Item[]) => {
   return { type: ActionTypes.SET_TODOS, payload: todos };
 };
 
