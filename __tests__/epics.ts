@@ -82,7 +82,7 @@ describe('fetch$ epic', () => {
 
   it('dispatches the correct actions when successful', async () => {
     const mockResponse = mockData;
-    const mockService: Todo.Fetcher = {
+    const mockService = {
       fetchItems: () => Promise.resolve(mockResponse),
     };
 
