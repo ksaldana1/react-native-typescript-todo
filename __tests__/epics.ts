@@ -3,6 +3,7 @@ import { ActionsObservable } from 'redux-observable';
 import { Observable } from 'rxjs/Rx';
 import { add$, delete$, fetch$, toggle$, clear$ } from '../src/redux/epics';
 import { ActionTypes } from '../src/redux/actions';
+import { Todo } from '../src/types/domain';
 
 const mockData = [
   { label: 'todo1', id: '123', completed: false },
@@ -17,7 +18,7 @@ describe('add$ epic', () => {
 
   it('dispatches the correct action when it is successful', async () => {
     const mockResponse = [{ label: 'new', id: '789', completed: false }, ...mockData];
-    const mockService = {
+    const mockService: Todo.Adder = {
       addItem: () => Promise.resolve(mockResponse),
     };
 
@@ -28,7 +29,7 @@ describe('add$ epic', () => {
   });
 
   it('dispatches an error when the call fails', async () => {
-    const mockService = {
+    const mockService: Todo.Adder = {
       addItem: () => Promise.reject('error'),
     };
 
@@ -50,7 +51,7 @@ describe('delete$ epic', () => {
 
   it('dispatches the correct action when successful', async () => {
     const mockResponse = [mockData[0]];
-    const mockService = {
+    const mockService: Todo.Deleter = {
       deleteItem: () => Promise.resolve(mockResponse),
     };
 
@@ -60,7 +61,7 @@ describe('delete$ epic', () => {
   });
 
   it('dispatches an error when the call fails', async () => {
-    const mockService = {
+    const mockService: Todo.Deleter = {
       deleteItem: () => Promise.reject('error'),
     };
 
@@ -81,7 +82,7 @@ describe('fetch$ epic', () => {
 
   it('dispatches the correct actions when successful', async () => {
     const mockResponse = mockData;
-    const mockService = {
+    const mockService: Todo.Fetcher = {
       fetchItems: () => Promise.resolve(mockResponse),
     };
 
@@ -95,7 +96,7 @@ describe('fetch$ epic', () => {
   });
 
   it('dispatches an error when the call fails', async () => {
-    const mockService = {
+    const mockService: Todo.Fetcher = {
       fetchItems: () => Promise.reject('error'),
     };
 
@@ -123,7 +124,7 @@ describe('toggle$ epic', () => {
       return todo;
     });
 
-    const mockService = {
+    const mockService: Todo.Toggler = {
       toggleItem: () => Promise.resolve(mockResponse),
     };
 
@@ -137,7 +138,7 @@ describe('toggle$ epic', () => {
   });
 
   it('dispatches an error when the request fails', async () => {
-    const mockService = {
+    const mockService: Todo.Toggler = {
       toggleItem: () => Promise.reject('error'),
     };
 
@@ -157,7 +158,7 @@ describe('clear$ epic', () => {
   });
   it('dispatches the correct action when successful', async () => {
     const mockResponse = mockData.filter(item => !item.completed);
-    const mockService = {
+    const mockService: Todo.Clearer = {
       clearCompletedItems: () => Promise.resolve(mockResponse),
     };
 
@@ -171,13 +172,16 @@ describe('clear$ epic', () => {
   });
 
   it('dispatches an error when the request fails', async () => {
-    const mockService = {
-      clearItems: () => Promise.reject('error'),
+    const mockService: Todo.Clearer = {
+      clearCompletedItems: () => Promise.reject('error'),
     };
 
     const expectedOutputActions = {
       type: ActionTypes.REQUEST_FAILED,
       payload: 'Clear Items Failed',
     };
+
+    const obs = clear$(mockService)(action$);
+    await expect(obs.toPromise()).resolves.toEqual(expectedOutputActions);
   });
 });
