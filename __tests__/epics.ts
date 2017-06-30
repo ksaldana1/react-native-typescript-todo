@@ -1,8 +1,8 @@
 import { ActionsObservable } from 'redux-observable';
 
 import { Observable } from 'rxjs/Rx';
-import { add$, delete$, fetch$, toggle$, clear$ } from '../src/redux/epics';
-import { ActionTypes } from '../src/redux/actions';
+import { add$, delete$, fetch$, toggle$, clear$, error$ } from '../src/redux/epics';
+import { TodoAction } from '../src/redux/actions';
 import { Todo } from '../src/types/domain';
 
 const mockData = [
@@ -12,7 +12,7 @@ const mockData = [
 
 describe('add$ epic', () => {
   const action$ = ActionsObservable.of({
-    type: ActionTypes.ADD_ITEM,
+    type: TodoAction.Constants.ADD_ITEM,
     payload: { label: 'new' },
   });
 
@@ -22,7 +22,10 @@ describe('add$ epic', () => {
       addItem: () => Promise.resolve(mockResponse),
     };
 
-    const expectedOutputActions = { type: ActionTypes.SET_TODOS, payload: mockResponse };
+    const expectedOutputActions = {
+      type: TodoAction.Constants.SET_TODOS,
+      payload: mockResponse,
+    };
 
     const obs = add$(mockService)(action$);
     await expect(obs.toPromise()).resolves.toEqual(expectedOutputActions);
@@ -34,7 +37,7 @@ describe('add$ epic', () => {
     };
 
     const expectedOutputActions = {
-      type: ActionTypes.REQUEST_FAILED,
+      type: TodoAction.Constants.REQUEST_FAILED,
       payload: 'Add Item Failed',
     };
 
@@ -45,7 +48,7 @@ describe('add$ epic', () => {
 
 describe('delete$ epic', () => {
   const action$ = ActionsObservable.of({
-    type: ActionTypes.REMOVE_ITEM,
+    type: TodoAction.Constants.REMOVE_ITEM,
     payload: { id: '456' },
   });
 
@@ -55,7 +58,10 @@ describe('delete$ epic', () => {
       deleteItem: () => Promise.resolve(mockResponse),
     };
 
-    const expectedOutputActions = { type: ActionTypes.SET_TODOS, payload: mockResponse };
+    const expectedOutputActions = {
+      type: TodoAction.Constants.SET_TODOS,
+      payload: mockResponse,
+    };
     const obs = delete$(mockService)(action$);
     await expect(obs.toPromise()).resolves.toEqual(expectedOutputActions);
   });
@@ -66,7 +72,7 @@ describe('delete$ epic', () => {
     };
 
     const expectedOutputActions = {
-      type: ActionTypes.REQUEST_FAILED,
+      type: TodoAction.Constants.REQUEST_FAILED,
       payload: 'Delete Item Failed',
     };
 
@@ -77,7 +83,7 @@ describe('delete$ epic', () => {
 
 describe('fetch$ epic', () => {
   const action$ = ActionsObservable.of({
-    type: ActionTypes.FETCH_TODOS,
+    type: TodoAction.Constants.FETCH_TODOS,
   });
 
   it('dispatches the correct actions when successful', async () => {
@@ -87,7 +93,7 @@ describe('fetch$ epic', () => {
     };
 
     const expectedOutputActions = {
-      type: ActionTypes.SET_TODOS,
+      type: TodoAction.Constants.SET_TODOS,
       payload: mockResponse,
     };
 
@@ -101,7 +107,7 @@ describe('fetch$ epic', () => {
     };
 
     const expectedOutputActions = {
-      type: ActionTypes.REQUEST_FAILED,
+      type: TodoAction.Constants.REQUEST_FAILED,
       payload: 'Fetch Failed',
     };
 
@@ -112,7 +118,7 @@ describe('fetch$ epic', () => {
 
 describe('toggle$ epic', () => {
   const action$ = ActionsObservable.of({
-    type: ActionTypes.TOGGLE_ITEM_COMPLETED,
+    type: TodoAction.Constants.TOGGLE_ITEM,
     payload: { id: '123' },
   });
 
@@ -129,7 +135,7 @@ describe('toggle$ epic', () => {
     };
 
     const expectedOutputActions = {
-      type: ActionTypes.SET_TODOS,
+      type: TodoAction.Constants.SET_TODOS,
       payload: mockResponse,
     };
 
@@ -143,7 +149,7 @@ describe('toggle$ epic', () => {
     };
 
     const expectedOutputActions = {
-      type: ActionTypes.REQUEST_FAILED,
+      type: TodoAction.Constants.REQUEST_FAILED,
       payload: 'Toggle Item Failed',
     };
 
@@ -154,7 +160,7 @@ describe('toggle$ epic', () => {
 
 describe('clear$ epic', () => {
   const action$ = ActionsObservable.of({
-    type: ActionTypes.REMOVE_COMPLETED,
+    type: TodoAction.Constants.REMOVE_COMPLETED,
   });
   it('dispatches the correct action when successful', async () => {
     const mockResponse = mockData.filter(item => !item.completed);
@@ -163,7 +169,7 @@ describe('clear$ epic', () => {
     };
 
     const expectedOutputActions = {
-      type: ActionTypes.SET_TODOS,
+      type: TodoAction.Constants.SET_TODOS,
       payload: mockResponse,
     };
 
@@ -177,7 +183,7 @@ describe('clear$ epic', () => {
     };
 
     const expectedOutputActions = {
-      type: ActionTypes.REQUEST_FAILED,
+      type: TodoAction.Constants.REQUEST_FAILED,
       payload: 'Clear Items Failed',
     };
 

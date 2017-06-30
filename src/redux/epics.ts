@@ -1,88 +1,80 @@
 import { ActionsObservable, combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs/Rx';
 import { Todo } from '../types/domain';
-import {
-  ToggleItemCompletedAction,
-  FetchAction,
-  RemoveCompletedAction,
-  RequestFailAction,
-  AddItemAction,
-  ActionTypes,
-  ActionCreators,
-  TodoActions,
-  RemoveItemAction,
-} from './actions';
+import { TodoAction } from './actions';
 
-type Action$ = ActionsObservable<{ type: ActionTypes }>;
+type Action$ = ActionsObservable<{ type: TodoAction.Constants }>;
 
 export const fetch$ = (svc: Todo.Fetcher) => (action$: Action$) => {
   return action$
-    .ofType(ActionTypes.FETCH_TODOS)
-    .switchMap(async (action: FetchAction) => {
+    .ofType(TodoAction.Constants.FETCH_TODOS)
+    .switchMap(async (action: TodoAction.Types.Fetch) => {
       try {
         const response = await svc.fetchItems();
-        return ActionCreators.setTodos(response);
+        return TodoAction.Creators.setTodos(response);
       } catch (e) {
-        return ActionCreators.requestFailed('Fetch Failed');
+        return TodoAction.Creators.requestFailed('Fetch Failed');
       }
     });
 };
 
 export const add$ = (svc: Todo.Adder) => (action$: Action$) => {
-  return action$.ofType(ActionTypes.ADD_ITEM).mergeMap(async (action: AddItemAction) => {
-    try {
-      const response = await svc.addItem(action.payload.label);
-      return ActionCreators.setTodos(response);
-    } catch (e) {
-      return ActionCreators.requestFailed('Add Item Failed');
-    }
-  });
+  return action$
+    .ofType(TodoAction.Constants.ADD_ITEM)
+    .mergeMap(async (action: TodoAction.Types.AddItem) => {
+      try {
+        const response = await svc.addItem(action.payload.label);
+        return TodoAction.Creators.setTodos(response);
+      } catch (e) {
+        return TodoAction.Creators.requestFailed('Add Item Failed');
+      }
+    });
 };
 
 export const delete$ = (svc: Todo.Deleter) => (action$: Action$) => {
   return action$
-    .ofType(ActionTypes.REMOVE_ITEM)
-    .mergeMap(async (action: RemoveItemAction) => {
+    .ofType(TodoAction.Constants.REMOVE_ITEM)
+    .mergeMap(async (action: TodoAction.Types.RemoveItem) => {
       try {
         const response = await svc.deleteItem(action.payload.id);
-        return ActionCreators.setTodos(response);
+        return TodoAction.Creators.setTodos(response);
       } catch (e) {
-        return ActionCreators.requestFailed('Delete Item Failed');
+        return TodoAction.Creators.requestFailed('Delete Item Failed');
       }
     });
 };
 
 export const toggle$ = (svc: Todo.Toggler) => (action$: Action$) => {
   return action$
-    .ofType(ActionTypes.TOGGLE_ITEM_COMPLETED)
-    .mergeMap(async (action: ToggleItemCompletedAction) => {
+    .ofType(TodoAction.Constants.TOGGLE_ITEM)
+    .mergeMap(async (action: TodoAction.Types.ToggleItem) => {
       try {
         const response = await svc.toggleItem(action.payload.id);
-        return ActionCreators.setTodos(response);
+        return TodoAction.Creators.setTodos(response);
       } catch (e) {
-        return ActionCreators.requestFailed('Toggle Item Failed');
+        return TodoAction.Creators.requestFailed('Toggle Item Failed');
       }
     });
 };
 
 export const clear$ = (svc: Todo.Clearer) => (action$: Action$) => {
   return action$
-    .ofType(ActionTypes.REMOVE_COMPLETED)
-    .switchMap(async (action: RemoveCompletedAction) => {
+    .ofType(TodoAction.Constants.REMOVE_COMPLETED)
+    .switchMap(async (action: TodoAction.Types.RemoveCompleted) => {
       try {
         const response = await svc.clearCompletedItems();
-        return ActionCreators.setTodos(response);
+        return TodoAction.Creators.setTodos(response);
       } catch (e) {
-        return ActionCreators.requestFailed('Clear Items Failed');
+        return TodoAction.Creators.requestFailed('Clear Items Failed');
       }
     });
 };
 
-const error$ = (action$: Action$) => {
+export const error$ = (action$: Action$) => {
   return action$
-    .ofType(ActionTypes.REQUEST_FAILED)
-    .switchMap((action: RequestFailAction) => {
-      return Observable.of(ActionCreators.clearError()).delay(3000);
+    .ofType(TodoAction.Constants.REQUEST_FAILED)
+    .switchMap((action: TodoAction.Types.RequestFail) => {
+      return Observable.of(TodoAction.Creators.clearError()).delay(3000);
     });
 };
 

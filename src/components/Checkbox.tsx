@@ -16,7 +16,7 @@ const Box = styled.View`
 const Inner = styled.View`
   flex: 1;
   margin: 2px;
-  background-color: rgba(0,0,0,0.8)
+  background-color: rgba(0, 0, 0, 0.8);
 `;
 
 const Checkbox = (props: Props) => {

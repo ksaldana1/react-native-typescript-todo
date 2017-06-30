@@ -7,7 +7,7 @@ import List from '../components/List';
 import Footer from '../components/Footer';
 import { Todo } from '../types/domain';
 import { TodoState } from '../redux/reducer';
-import { ActionTypes, ActionCreators } from '../redux/actions';
+import { TodoAction } from '../redux/actions';
 
 interface Props {
   items: Todo.Item[];
@@ -20,9 +20,7 @@ interface Props {
   fetchTodos: () => void;
 }
 
-const Container = styled.View`
-  flex: 1;
-`;
+const Container = styled.View`flex: 1;`;
 
 const Divider = styled.View`
   height: 1;
@@ -61,12 +59,12 @@ const mapStateToProps = (state: TodoState) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addItem: (label: string) => dispatch(ActionCreators.addItem(label)),
-  fetchTodos: () => dispatch(ActionCreators.fetchTodos()),
-  removeItem: (item: Todo.Item) => dispatch(ActionCreators.removeItem(item.id)),
+  addItem: (label: string) => dispatch(TodoAction.Creators.addItem(label)),
+  fetchTodos: () => dispatch(TodoAction.Creators.fetchTodos()),
+  removeItem: (item: Todo.Item) => dispatch(TodoAction.Creators.removeItem(item.id)),
   toggleItemCompleted: (item: Todo.Item) =>
-    dispatch(ActionCreators.toggleItemCompleted(item.id)),
-  removeCompleted: () => dispatch(ActionCreators.removeCompleted()),
+    dispatch(TodoAction.Creators.toggleItemCompleted(item.id)),
+  removeCompleted: () => dispatch(TodoAction.Creators.removeCompleted()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
